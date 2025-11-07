@@ -7,33 +7,53 @@ from ship import Ship
 
 class AlienInvasion:
     """Класс для управления ресурсами и поведением игры."""
-
     def __init__(self):
         """Инициализирует игру и создает игровые ресурсы."""
         pygame.init()
-
         # Создать окно для прорисовки всех графических элементов.
         self.settings = Settings()
 
-        self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
-        pygame.display.set_caption("Alien Invasion")
+        # Запускает игру в полноэкранном режиме.
+        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        self.settings.screen_width = self.screen.get_rect().width
+        self.settings.screen_height = self.screen.get_rect().height
 
+        pygame.display.set_caption("Alien Invasion")
         self.ship = Ship(self)
 
     def run_game(self):
         """Запуск основного цикла игры."""
         while True:
             self._check_events()
-            self._update_screen()
+            self.ship.update()  # Обновление позиции корабля после проверки событий клавиатуры.
+            self._update_screen()  # Обновление экрана.
+
     def _check_events(self):
         """Обрабатывает нажатия клавиш и события мыши."""
         for event in pygame.event.get():  # Возвращ. список событий с момента последнего вызова функции.
             if event.type == pygame.QUIT:
                 sys.exit()  # Метод для выхода из игры.
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RIGHT:
-                    self.ship.rect.x += 1  # Переместить корабль вправо.
+                self._check_keydown_events(event)
+            elif event.type == pygame.KEYUP:
+                self._check_keyup_events(event)
 
+    def _check_keydown_events(self, event):
+        """Реагирует на нажатие клавиш."""
+        if event.key == pygame.K_RIGHT:
+            self.ship.moving_right = True  # Перемещает корабль вправо пока нажата кнопка.
+        elif event.key == pygame.K_LEFT:
+            self.ship.moving_left = True
+        # Завершает игру при нажатии клавиши Q.
+        elif event.key == pygame.K_q:
+            sys.exit()
+
+    def _check_keyup_events(self, event):
+        """Реагирует на отпускание клавиш."""
+        if event.key == pygame.K_RIGHT:
+            self.ship.moving_right = False
+        elif event.key == pygame.K_LEFT:
+            self.ship.moving_left = False
 
     def _update_screen(self):
         """Обновляет изображения на экране и отображает новый экран."""
