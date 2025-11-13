@@ -1,6 +1,5 @@
 import pygame
 
-
 class Ship():
     """Класс для управления кораблем."""
     def __init__(self, ai_game):

@@ -1,5 +1,5 @@
 class Settings():
-    """Класс для ранения всех настроек игры Alien Invasion."""
+    """Класс для хранения всех настроек игры Alien Invasion."""
 
     def __init__(self):
         """Инициализирует настройки игры."""
@@ -10,3 +10,10 @@ class Settings():
 
         # Настройки корабля
         self.ship_speed = 0.75
+
+        # Параметры снаряда.
+        self.bullet_speed = 1
+        self.bullet_width = 3
+        self.bullet_height = 15
+        self.bullet_color = (60, 60, 60)
+        self.bullets_allowed = 3
